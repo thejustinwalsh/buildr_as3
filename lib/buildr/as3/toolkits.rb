@@ -22,6 +22,7 @@
 
 require "#{File.dirname(__FILE__)}/toolkits/base"
 require "#{File.dirname(__FILE__)}/toolkits/flexsdk"
+require "#{File.dirname(__FILE__)}/toolkits/playerglobal"
 require "#{File.dirname(__FILE__)}/toolkits/apparat"
 require "#{File.dirname(__FILE__)}/toolkits/alchemy"
 
