@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2011 by Dominic Graefen / http://devboy.org
+# Copyright (C) 2011 by Justin Walsh / http://theJustinWalsh.com
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,17 +20,19 @@
 # THE SOFTWARE.
 #
 
-require "#{File.dirname(__FILE__)}/compiler/base"
-require "#{File.dirname(__FILE__)}/compiler/mxmlc"
-require "#{File.dirname(__FILE__)}/compiler/compc"
-require "#{File.dirname(__FILE__)}/compiler/airmxmlc"
-require "#{File.dirname(__FILE__)}/compiler/aircompc"
-require "#{File.dirname(__FILE__)}/compiler/anecompc"
+module Buildr
+  module AS3
+    module Compiler
 
-Buildr::Compiler << Buildr::AS3::Compiler::Mxmlc
-Buildr::Compiler << Buildr::AS3::Compiler::Compc
-Buildr::Compiler << Buildr::AS3::Compiler::AirMxmlc
-Buildr::Compiler << Buildr::AS3::Compiler::AirCompc
-Buildr::Compiler << Buildr::AS3::Compiler::AneCompc
+      class AneCompc < AirCompc
 
-require "#{File.dirname(__FILE__)}/compiler/task"
+        specify :language => :actionscript,
+                :sources => [:as3, :mxml], :source_ext => [:as, :mxml],
+                :target => "bin", :target_ext => "swc",
+                :packaging => :swc
+
+      end
+      
+    end
+  end
+end
