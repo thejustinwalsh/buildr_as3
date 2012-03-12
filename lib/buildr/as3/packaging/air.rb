@@ -30,7 +30,7 @@ module Buildr
         include Extension
 
         attr_writer :target_air, :src_swf, :flexsdk
-        attr_reader :target_air, :src_swf, :storetype, :keystore, :storepass, :appdescriptor, :libs, :flexsdk
+        attr_reader :target_air, :src_swf, :target, :storetype, :keystore, :storepass, :appdescriptor, :provisioningprofile, :platformsdk, :libs, :flexsdk
 
         def initialize(*args) #:nodoc:
           super
@@ -39,11 +39,23 @@ module Buildr
             cmd_args = []
             cmd_args << "-jar" << flexsdk.adt_jar
             cmd_args << "-package"
+            unless target.nil?
+              cmd_args << "-target" << target
+            end
             cmd_args << "-storetype" << storetype
             cmd_args << "-keystore" << keystore
             cmd_args << "-storepass" << storepass
+            unless provisioningprofile.nil?
+              cmd_args << "-provisioning-profile" <<  provisioningprofile
+            end
+            if target == "ipa-ad-hoc"
+              @target_air = target_air.split(".air")[0] + ".ipa"
+            end
             cmd_args << target_air
             cmd_args << appdescriptor
+            unless platformsdk.nil?
+              cmd_args << "-platformsdk" <<  platformsdk
+            end
             cmd_args << "-C" << File.dirname(src_swf) << File.basename(src_swf)
             libs.each do |key, value|
               puts "key,value", key, value
@@ -76,10 +88,13 @@ module Buildr
 
         def sign(*args)
           args.each do |arg|
+            @target = arg[:target] if arg.has_key? :target
             @storetype = arg[:storetype] if arg.has_key? :storetype
             @keystore = arg[:keystore] if arg.has_key? :keystore
             @storepass = arg[:storepass] if arg.has_key? :storepass
             @appdescriptor = arg[:appdescriptor] if arg.has_key? :appdescriptor
+            @provisioningprofile = arg[:provisioningprofile] if arg.has_key? :provisioningprofile
+            @platformsdk = arg[:platformsdk] if arg.has_key? :platformsdk
           end
           self
         end
