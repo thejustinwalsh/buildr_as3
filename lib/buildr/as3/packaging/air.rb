@@ -30,7 +30,7 @@ module Buildr
         include Extension
 
         attr_writer :target_air, :src_swf, :flexsdk
-        attr_reader :target_air, :src_swf, :target, :storetype, :keystore, :storepass, :appdescriptor, :provisioningprofile, :platformsdk, :libs, :flexsdk
+        attr_reader :target_air, :src_swf, :target, :storetype, :keystore, :storepass, :appdescriptor, :provisioningprofile, :platformsdk, :libs, :extdir, :flexsdk
 
         def initialize(*args) #:nodoc:
           super
@@ -55,6 +55,9 @@ module Buildr
             cmd_args << appdescriptor
             unless platformsdk.nil?
               cmd_args << "-platformsdk" <<  platformsdk
+            end
+            unless extdir.nil?
+              cmd_args << "-extdir" << extdir
             end
             cmd_args << "-C" << File.dirname(src_swf) << File.basename(src_swf)
             libs.each do |key, value|
@@ -105,7 +108,11 @@ module Buildr
             case arg
               when Hash
                 arg.each do |key, value|
-                  @libs[key] = value
+                  if key == :extdir
+                    @extdir = value
+                  else
+                    @libs[key] = value
+                  end
                 end
             end
           end
